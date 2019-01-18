@@ -2,9 +2,9 @@ server {
         listen 80;
         listen [::]:80;
 
-        server_name   pilot.paraguide.uk;
+        server_name   www.paraguide.uk paraguide.uk;
 
-        root /var/www/pilot.paraguide.uk;
+        root /var/www/paraguide.uk;
         index index.html;
 
         location / {
