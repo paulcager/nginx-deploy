@@ -7,8 +7,10 @@ RUN echo 'deb http://ftp.debian.org/debian stretch-backports main' >>/etc/apt/so
 
 COPY sites-available/* /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/paraguide.uk /etc/nginx/sites-enabled/
+RUN ln -s /etc/nginx/sites-available/home.paulcager.org /etc/nginx/sites-enabled/
 COPY www/ /var/www/
 COPY www/paraguide.uk/ /var/www/pilot.paraguide.uk
+COPY .htpasswd /etc/nginx/
 
 CMD ["nginx", "-g", "daemon off;"]
 
