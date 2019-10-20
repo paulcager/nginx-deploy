@@ -1,48 +1,12 @@
 version: '3'
 
 services:
-  db:
-    image: postgres:alpine
-    restart: always
-    volumes:
-      - db:/var/lib/postgresql/data
-    env_file:
-      - db.env
-
-  app:
-    image: nextcloud:fpm-alpine
-    restart: always
-    volumes:
-      - nextcloud:/var/www/html
-    environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_DB=nextcloud
-    env_file:
-      - db.env
-    depends_on:
-      - db
-
-  nextcloud-web:
-    build: ./nextcloud-web
-    restart: always
-    volumes:
-      - nextcloud:/var/www/html:ro
-    environment:
-      - VIRTUAL_HOST=nextcloud.paulcager.org
-      - LETSENCRYPT_HOST=nextcloud.paulcager.org
-      - LETSENCRYPT_EMAIL=paul.cager@gmail.com
-    depends_on:
-      - app
-    networks:
-      - proxy-tier
-      - default
-
   static-web:
     build: ./static-web
     restart: always
     environment:
-      - VIRTUAL_HOST=www.home.paulcager.org,home.paulcager.org,www2.paraguide.uk,www.paraguide.uk,paraguide.uk
-      - LETSENCRYPT_HOST=www.home.paulcager.org,home.paulcager.org,paraguide.uk
+      - VIRTUAL_HOST=www.paraguide.uk,paraguide.uk,www.cager.name,cager.name
+      - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk,www.cager.name,cager.name
       - LETSENCRYPT_EMAIL=paul.cager@gmail.com
     volumes:
       - /var/www:/var/www:ro
@@ -80,8 +44,6 @@ services:
       - proxy
 
 volumes:
-  db:
-  nextcloud:
   certs:
   vhost.d:
   html:
