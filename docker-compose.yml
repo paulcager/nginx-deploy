@@ -1,13 +1,26 @@
 version: '3'
 
 services:
+  paraguide:
+    image: paulcager/paraguide
+    restart: always
+    environment:
+      - VIRTUAL_HOST=www.paraguide.uk,paraguide.uk
+      - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk
+      - LETSENCRYPT_EMAIL=paul.cager@gmail.com
+    volumes:
+            - ./secrets:/app/secrets:ro
+    command:
+            [ "/app/paraguide", "--port", ":80" ]
+    networks:
+      - proxy-tier
+      - default
+
   static-web:
     build: ./static-web
     restart: always
     environment:
-      - VIRTUAL_HOST=www.paraguide.uk,paraguide.uk,www.cager.name,cager.name
-      - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk,www.cager.name,cager.name
-      - LETSENCRYPT_EMAIL=paul.cager@gmail.com
+      - VIRTUAL_HOST=www.cager.name,cager.name
     volumes:
       - /var/www:/var/www:ro
     networks:
