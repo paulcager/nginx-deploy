@@ -5,8 +5,8 @@ services:
     image: paulcager/paraguide
     restart: always
     environment:
-      - VIRTUAL_HOST=www.paraguide.uk,paraguide.uk
-      - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk
+      - VIRTUAL_HOST=www.paraguide.uk,paraguide.uk,li.paraguide.uk
+      - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk,li.paraguide.uk
       - LETSENCRYPT_EMAIL=paul.cager@gmail.com
     volumes:
             - ./secrets:/app/secrets:ro
@@ -40,7 +40,7 @@ services:
       - vhost.d:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./proxy/proxy.conf:/etc/nginx/conf.d/proxy.conf
+      - ./proxy/nginx.tmpl:/app/nginx.tmpl
     networks:
       - proxy-tier
 
