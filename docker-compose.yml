@@ -11,7 +11,16 @@ services:
     volumes:
             - ./secrets:/app/secrets:ro
     command:
-            [ "/app/paraguide", "--port", ":80" ]
+            [ "/app/paraguide", "--osgrid-server", "http://osgrid-server:9090/gridref/", "--port", ":80" ]
+    networks:
+      - proxy-tier
+      - default
+
+  osgrid-server:
+    image: paulcager/osgrid-server
+    restart: always
+    ports:
+      - 9090:9090
     networks:
       - proxy-tier
       - default
