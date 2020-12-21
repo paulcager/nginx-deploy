@@ -105,9 +105,13 @@ map $scheme $proxy_x_forwarded_ssl {
 
 gzip_types text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
-log_format vhost '$host $remote_addr - $upstream_cache_status [$time_local] '
+log_format vhost '$host $remote_addr "$http_x_forwarded_for" - $upstream_cache_status [$time_local] '
                  '"$request" $status $body_bytes_sent '
                  '"$http_referer" "$http_user_agent"';
+
+#   See also --with-http_realip_module in https://www.loadbalancer.org/blog/nginx-and-x-forwarded-for-header/
+#   and http://nginx.org/en/docs/http/ngx_http_realip_module.html
+#   and https://www.cloudflare.com/ips-v4
 
 access_log off;
 
