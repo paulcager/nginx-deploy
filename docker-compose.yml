@@ -11,6 +11,7 @@ services:
       - LETSENCRYPT_EMAIL=paul.cager@gmail.com
     volumes:
             - ./secrets:/app/secrets:ro
+            - /app/club-cache
     command:
             [ "/app/paraguide", "--port", ":80" ]
     networks:
