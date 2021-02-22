@@ -1,0 +1,8 @@
+home.paulcager.org {
+	respond "Hello"
+}
+
+www2.paraguide.uk {
+	log
+	reverse_proxy paraguide:80
+}

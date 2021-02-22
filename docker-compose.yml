@@ -4,97 +4,41 @@ services:
   paraguide:
     image: paulcager/paraguide
     restart: always
-    environment:
-      - VIRTUAL_HOST=www.paraguide.uk,paraguide.uk,li.paraguide.uk,direct.paraguide.uk,direct2.paraguide.uk
-        # - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk,li.paraguide.uk
-      - LETSENCRYPT_HOST=www.paraguide.uk,paraguide.uk,li.paraguide.uk
-      - LETSENCRYPT_EMAIL=paul.cager@gmail.com
     volumes:
             - ./secrets:/app/secrets:ro
-            - /app/club-cache
     command:
             [ "/app/paraguide", "--port", ":80" ]
-    networks:
-      - proxy-tier
-      - default
 
   airspace-server:
     image: paulcager/gb-airspace
     restart: always
     ports:
-      - 127.0.0.1:9092:9092
-    networks:
-      - proxy-tier
-      - default
+      - 9092
 
   osheight-server:
     image: paulcager/gosdata
     restart: always
     ports:
-      - 127.0.0.1:9091:9091
-    networks:
-      - proxy-tier
-      - default
+      - 9091
 
   osgrid-server:
     image: paulcager/osgrid-server
     restart: always
     ports:
-      - 127.0.0.1:9090:9090
-    networks:
-      - proxy-tier
-      - default
+      - 9090
 
-  static-web:
-    build: ./static-web
-    restart: always
-    environment:
-      - VIRTUAL_HOST=www.cager.name,cager.name,li.cager.name
-        # - LETSENCRYPT_HOST=www.cager.name
-    volumes:
-      - /var/www:/var/www:ro
-      - ./secrets/key.txt:/var/www/www.cager.name/key.txt:ro
-    networks:
-      - proxy-tier
-      - default
-
-  proxy:
-    image: jwilder/nginx-proxy:alpine
+  caddy:
+    image: caddy:2.3.0
     restart: always
     ports:
       - 80:80
       - 443:443
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-    environment:
-      - HTTPS_METHOD=noredirect
-      - HSTS=off
     volumes:
-      - certs:/etc/nginx/certs:ro
-      - vhost.d:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./proxy/nginx.tmpl:/app/nginx.tmpl
-    networks:
-      - proxy-tier
-
-  letsencrypt-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    restart: always
-    volumes:
-      - certs:/etc/nginx/certs
-      - vhost.d:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - proxy-tier
-    depends_on:
-      - proxy
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
 
 volumes:
-  certs:
-  vhost.d:
-  html:
+  caddy_data:
+  caddy_config:
 
-networks:
-  proxy-tier:
