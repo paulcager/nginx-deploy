@@ -6,6 +6,7 @@ services:
     restart: always
     volumes:
             - ./secrets:/app/secrets:ro
+            - club_cache:/app/club-cache
     command:
             [ "/app/paraguide", "--port", ":80" ]
 
@@ -37,8 +38,11 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /var/www:/var/www
+      - ./secrets/key.txt:/var/www/www.cager.name/key.txt:ro
 
 volumes:
   caddy_data:
   caddy_config:
+  club_cache:
 

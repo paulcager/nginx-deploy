@@ -1,8 +1,28 @@
-home.paulcager.org {
-	respond "Hello"
+{
+	email paul.cager@gmail.com
 }
 
-www2.paraguide.uk {
-	log
+www.paraguide.uk, li.paraguide.uk, paraguide.uk {
+#www2.paraguide.uk {
+	log {
+		format console
+	}
+	encode zstd gzip
 	reverse_proxy paraguide:80
+}
+
+cager.name, www.cager.name, li.cager.name {
+#www2.cager.name {
+	root * /var/www/www.cager.name
+	file_server  {
+		hide .*
+	}
+}
+
+# Disable auto redirect from http -> https for cager.name. It needs to be accessible from initrd without SSL layer available.
+http://cager.name, http://*.cager.name {
+	root * /var/www/www.cager.name
+	file_server  {
+		hide .*
+	}
 }
